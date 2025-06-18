@@ -222,17 +222,6 @@
 			<view class="location-mask" @tap="openLocation"></view>
 		</view>
 
-		<view class="phone mb58">
-			<view class="phone-item" v-for="(item, index) in couple" :key="index">
-				<image class="couple-cover" :src="item.image" mode="aspectFit" />
-
-				<button @tap="call" :data-phone="item.number">
-					<image src="/static/images/icon/phone.png" mode="aspectFit" />
-					联系{{ item.alias }}
-				</button>
-			</view>
-		</view>
-
 		<!-- <button form-type="submit" open-type="getUserInfo" @tap="goPresent">我要出席</button> -->
 
 		<view class="tc lh21 mb58">
@@ -393,14 +382,10 @@ const anniversary = '2021.06.12'
 const couple = [
 	{
 		name: '杨明',
-		image: 'https://h5cdn.hunbei.com/h5MobileUpload/2025-5-23-rdXGCZjWhZcGhJQRWJ2NcTzmGKmx7jfE',
-		number: '18710551637',
 		alias: '新郎'
 	},
 	{
 		name: '沙妍',
-		image: 'https://h5cdn.hunbei.com/h5MobileUpload/2025-5-23-rdXGCZjWhZcGhJQRWJ2NcTzmGKmx7jfE',
-		number: '13651350783',
 		alias: '新娘'
 	}
 ]
@@ -408,13 +393,13 @@ const magic = ref(true);
 
 const imgs = {
 	// 封面图
-	cover: 'https://h5cdn.hunbei.com/h5MobileUpload/2025-5-23-rdXGCZjWhZcGhJQRWJ2NcTzmGKmx7jfE',
+	cover: 'https://res.wx.qq.com/t/fed_upload/459fb8da-b31a-420f-b8cc-f51126952685/cover.jpg',
 	// 音乐封面
 	poster: 'https://res.wx.qq.com/t/fed_upload/d811d254-e5d6-4c19-9ff8-77c4b6128137/poster.jpg',
 	// 新郎独照
 	husband: 'https://res.wx.qq.com/t/fed_upload/d811d254-e5d6-4c19-9ff8-77c4b6128137/husband.jpg',
 	// 新娘独照
-	wife: 'https://h5cdn.hunbei.com/editorTempCustomPic/2025-5-23-nTSpkABSr2yySeTadNntHYDtGFmKA7HA.jpeg',
+	wife: 'https://res.wx.qq.com/t/fed_upload/d811d254-e5d6-4c19-9ff8-77c4b6128137/wife.jpg',
 	// 轮播图1
 	swiper1: [
 		'https://res.wx.qq.com/t/fed_upload/849dfcf2-049a-42ba-9f6c-ddd6f30b8487/swiper1-1.jpg',
