@@ -12,22 +12,22 @@
 
   ### 婚礼邀请函（即首页）
   把 [zouyaoji/wedding-invitation](https://github.com/zouyaoji/wedding-invitation.git) 项目的首页替换成了 [JaminQ/wedding-invitation](https://github.com/JaminQ/wedding-invitation.git) 的 H5 形式，但由于后者是原生小程序代码，所以本人进行了必要的调整以融合到 uniapp 风格，几乎保留了全部内容，并新增了倒计时功能
-  ![首页](./images/index.jpg)
+  <img src="./images/index.jpg" alt="首页" width="320px" />
 
   ### 甜蜜相册
   摈弃了 [zouyaoji/wedding-invitation](https://github.com/zouyaoji/wedding-invitation.git) 中相册的布局和动画，而是换成了双列的静态展示
 
   ### 酒店导航
   复用 [zouyaoji/wedding-invitation](https://github.com/zouyaoji/wedding-invitation.git) 的整体页面布局，优化了地图组件样式，更换了联系新郎和联系新娘的组件，同时区分了“婚礼大厅”和“住宿酒店”两个 Marker 点
-  ![导航](./images/map.jpg)
+  <img src="./images/map.jpg" alt="导航" width="320px" />
 
   ### 好友祝福
   将 [zouyaoji/wedding-invitation](https://github.com/zouyaoji/wedding-invitation.git) 的 “好友祝福” 和 “留言评论” 融合成了这一个页面，上下布局，分别展示留言和送上祝福的好友微信头像，留言时自动送上祝福
-  ![祝福](./images/greet.jpg)
+  <img src="./images/greet.jpg" alt="祝福" width="320px" />
 
   ### 出席登记
   将 [zouyaoji/wedding-invitation](https://github.com/zouyaoji/wedding-invitation.git) 的 “留言评论” 页面中的 “我要出席” 按钮对应的逻辑和页面，单独安排了一个页面，因为我觉得出席登记这个事毕竟还是挺重要的
-  ![登记](./images/present.jpg)
+  <img src="./images/present.jpg" alt="登记" width="320px" />
 
   ### 其他改动点
   - 删除了 [zouyaoji/wedding-invitation](https://github.com/zouyaoji/wedding-invitation.git) 中所有关于微信云开发的保留代码，意味着此项目完全不支持微信云开发，如果想用云开发的朋友请移步 [zouyaoji/wedding-invitation](https://github.com/zouyaoji/wedding-invitation.git)，或参考其使用，自行调整
@@ -76,7 +76,7 @@ pnpm install
 微信  /  支付宝
 > 备注个人邮箱，方便接收代码包
 
-![wxpay](./images/weixinpay.png) ![alipay](./images/alipay.png)
+<img src="./images/weixinpay.png" alt="微信" width="150px" /> <img src="./images/alipay.png" alt="支付宝" width="150px" />
 
 
 ## 其他
