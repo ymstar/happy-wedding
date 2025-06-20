@@ -23,7 +23,7 @@
 import { getCurrentInstance, onMounted, ref } from 'vue'
 import HSwiper from '@src/component/swiper.vue'
 import HVideo from '@src/component/video.vue'
-import { onHide, onShow } from '@dcloudio/uni-app'
+import { onHide, onShareAppMessage, onShareTimeline, onShow } from '@dcloudio/uni-app'
 import { getResouces, getCommonConfig } from '@src/api/wedding-invitation'
 import { GlobalData } from '@src/types'
 
@@ -53,6 +53,22 @@ onShow(() => {
 
 onHide(() => {
   autoplay.value = false
+})
+
+// 分享到会话
+onShareAppMessage(() => {
+	return {
+		title: '好久不见，婚礼见٩(๑^o^๑)۶',
+		imageUrl: '../../static/images/shareAppMsg.jpg'
+	};
+})
+
+// 分享到朋友圈
+onShareTimeline(() => {
+	return {
+		title: '好久不见，婚礼见٩(๑^o^๑)۶',
+		imageUrl: '../../static/images/shareTimeline.jpg'
+	};
 })
 
 const getList = () => {

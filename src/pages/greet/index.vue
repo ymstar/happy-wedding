@@ -68,7 +68,7 @@
         <view class="cu-bar bg-white justify-end">
           <view class="action">
             <button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
-            <button class="cu-btn bg-green margin-left" @tap="onGreetConfirm">确定</button>
+            <button class="cu-btn bg-green margin-left" @tap="onConfirm">确定</button>
           </view>
         </view>
       </view>
@@ -96,7 +96,7 @@ import {
   uploadAvatar,
   deleteMessage as deleteMessageApi,
 } from '@src/api/wedding-invitation'
-import { onShow } from '@dcloudio/uni-app'
+import { onShareAppMessage, onShareTimeline, onShow } from '@dcloudio/uni-app'
 
 const isOpen = ref(false)
 const desc = ref('')
@@ -143,6 +143,22 @@ onMounted(() => {
   magic.value = globalData.magic;
 })
 
+// 分享到会话
+onShareAppMessage(() => {
+  return {
+    title: '好久不见，婚礼见٩(๑^o^๑)۶',
+    imageUrl: '../../static/images/shareAppMsg.jpg'
+  };
+})
+
+// 分享到朋友圈
+onShareTimeline(() => {
+  return {
+    title: '好久不见，婚礼见٩(๑^o^๑)۶',
+    imageUrl: '../../static/images/shareTimeline.jpg'
+  };
+})
+
 const formatDateTime = dateTimeString => {
   const dateObject = new Date(dateTimeString)
   const formattedDateTime = `${dateObject.toISOString().slice(0, 19).replace('T', ' ')}`
@@ -156,7 +172,7 @@ const onInput = e => {
 const hideModal = e => {
   modalName.value = null
 }
-const onGreetConfirm = e => {
+const onConfirm = e => {
   if (nickname.value === null || nickname.value === '') {
     showToast('请选择或输入昵称~')
     return
@@ -168,7 +184,7 @@ const onGreetConfirm = e => {
   }
   modalName.value = null
 
-  const openId = globalData.mpUserInfo.openId
+  const openId = instance.appContext.config.globalProperties.$MpUserData.openId
   uploadAvatar(avatarUrl.value, {
     openId
   }).then(res => {
@@ -180,6 +196,9 @@ const onGreetConfirm = e => {
       }
     }).then(res => {
       showToast('祝福成功~')
+      if (magic.value) {
+        isOpen.value = true
+      }
       getUserList()
       getUserByOpenId(openId).then(res => {
         if (res?.data?.length > 0) {

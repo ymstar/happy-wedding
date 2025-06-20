@@ -14,7 +14,7 @@ import { ref, getCurrentInstance } from 'vue'
 import HForm from '@src/component/form.vue'
 import HFormlist from '@src/component/formlist.vue'
 import { getPresentList, addOrUpdatePresent } from '@src/api/wedding-invitation'
-import { onShow } from '@dcloudio/uni-app'
+import { onShareAppMessage, onShareTimeline, onShow } from '@dcloudio/uni-app'
 import { GlobalData } from '@src/types'
 
 const formRef = ref(null)
@@ -25,6 +25,22 @@ const globalData: GlobalData = instance.appContext.config.globalProperties.globa
 const openId = globalData.mpUserInfo.openId
 
 const magic = globalData.magic;
+
+// 分享到会话
+onShareAppMessage(() => {
+	return {
+		title: '好久不见，婚礼见٩(๑^o^๑)۶',
+		imageUrl: '../../static/images/shareAppMsg.jpg'
+	};
+})
+
+// 分享到朋友圈
+onShareTimeline(() => {
+	return {
+		title: '好久不见，婚礼见٩(๑^o^๑)۶',
+		imageUrl: '../../static/images/shareTimeline.jpg'
+	};
+})
 
 const getIsPresentExist = () => {
   getPresentList(openId).then(res => {

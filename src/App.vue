@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onLaunch, onShow, onHide } from '@dcloudio/uni-app'
+import { onLaunch, onShow, onHide, onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app'
 import { getCurrentInstance, onMounted } from 'vue'
 import { code2Session, getUserByOpenId } from './api/wedding-invitation'
 
@@ -16,6 +16,7 @@ onHide(() => {
 uni.login({
   provider: 'weixin',
   success: res => {
+    console.log('login succeed:', res)
     code2Session(res.code).then(res => {
       const openId = res.data.openid
       instance.appContext.config.globalProperties.$MpUserData = {

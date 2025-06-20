@@ -1,3 +1,4 @@
+import { showToast } from '@src/utils'
 import { http } from './service'
 /**
  * 获取通用配置

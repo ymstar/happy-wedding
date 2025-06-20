@@ -305,7 +305,7 @@
 					<image @tap="goPhone" src="/static/images/icon/phone.png" mode="widthFix" />
 				</view>
 				<view class="controller-btn">
-					<image @tap="goWrite" src="/static/images/icon/write.png" mode="widthFix" />
+					<image @tap="goGreet" src="/static/images/icon/write.png" mode="widthFix" />
 				</view>
 				<view class="controller-btn">
 					<image @tap="openLocation" src="/static/images/icon/go.png" mode="widthFix" />
@@ -536,7 +536,7 @@ onShareAppMessage(() => {
 onShareTimeline(() => {
 	return {
 		title: '好久不见，婚礼见٩(๑^o^๑)۶',
-		imageUrl: '/static/images/shareTimeline.jpg'
+		imageUrl: '../../static/images/shareTimeline.jpg'
 	};
 })
 
@@ -550,9 +550,14 @@ const toggleMusic = () => {
 	}
 }
 const openLocation = () => {
-	uni.switchTab({
-		url: '../map/index'
-	});
+	// uni.switchTab({
+	// 	url: '../map/index'
+	// });
+	wx.openLocation({
+    latitude: Number(location.latitude),
+    longitude: Number(location.longitude),
+    scale: 18
+  })
 }
 
 // 呼叫
@@ -582,7 +587,7 @@ const goPhone = () => {
 }
 
 // 跳转到写表单板块
-const goWrite = () => {
+const goGreet = () => {
 	uni.switchTab({
 		url: '../greet/index'
 	})
@@ -641,6 +646,7 @@ const goInfo = () => {
 	bottom: 0;
 	width: 498rpx;
 	height: 462rpx;
+	z-index: 999;
 }
 
 .cover {
@@ -1066,7 +1072,7 @@ const goInfo = () => {
 }
 
 .img-end {
-	width: 346rpx;
+	width: 100%;
 	height: 176rpx;
 }
 

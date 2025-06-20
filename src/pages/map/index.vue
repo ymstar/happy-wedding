@@ -25,7 +25,7 @@
         <view>河北省张家口市张北县永春南大街82号万正商厦一楼</view>
       </view>
       <map class="content" id="map" :longitude="activeMarker.longitude" :latitude="activeMarker.latitude"
-        :markers="markers" :enable-zoom="false" scale="18" @markertap="toNav"></map>
+        :markers="markers" scale="18" @markertap="toNav"></map>
     </div>
     <div class="call">
       <div class="btn-group">
@@ -103,6 +103,7 @@
   </view>
 </template>
 <script setup lang="ts">
+import { onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app'
 import { getCommonConfig, getPresentList } from '@src/api/wedding-invitation'
 import { GlobalData } from '@src/types'
 import { getCurrentInstance, onMounted, ref } from 'vue'
@@ -158,11 +159,26 @@ onMounted(() => {
   })
 })
 
+// 分享到会话
+onShareAppMessage(() => {
+	return {
+		title: '好久不见，婚礼见٩(๑^o^๑)۶',
+		imageUrl: '../../static/images/shareAppMsg.jpg'
+	};
+})
+
+// 分享到朋友圈
+onShareTimeline(() => {
+	return {
+		title: '好久不见，婚礼见٩(๑^o^๑)۶',
+		imageUrl: '../../static/images/shareTimeline.jpg'
+	};
+})
+
 const toNav = res => {
-  console.log(res)
   wx.openLocation({
-    latitude: Number(markers.value[0].latitude),
-    longitude: Number(markers.value[0].longitude),
+    latitude: Number(markers.value[res.markerId].latitude),
+    longitude: Number(markers.value[res.markerId].longitude),
     scale: 18
   })
 }
@@ -298,7 +314,7 @@ const switchLocation = (index) => {
         justify-content: center;
 
         .call-icon {
-          margin-top: 10rpx;
+          margin-top: 15rpx;
           margin-right: 15rpx;
           height: 35rpx;
           width: 35rpx;
