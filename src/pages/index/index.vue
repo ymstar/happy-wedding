@@ -1,7 +1,7 @@
 <template>
 	<view class="index">
 		<view class="title">
-			<view>好久不见，婚礼见丨{{ couple[0].name }}&{{ couple[1].name }}</view>
+			<view>好久不见，婚礼见丨{{ couple.groom.name }}&{{ couple.bride.name }}</view>
 			<view>我们结婚啦~</view>
 		</view>
 
@@ -179,13 +179,13 @@
 
 		<view class="tc lh21 mb58">
 			<view class="love mb58">囍</view>
-			<swiper class="swiper-chinese mb58" autoplay circular interval="2500" easing-function="linear"
+			<!-- 			<swiper class="swiper-chinese mb58" autoplay circular interval="2500" easing-function="linear"
 				indicator-dots>
 				<swiper-item v-for="(item, index) in imgs.swiper3" :key="index">
 					<image class="img-full-width" :src="item" mode="widthFix" />
 				</swiper-item>
-			</swiper>
-			<view class="mb58">{{ couple[0].name }} & {{ couple[1].name }}</view>
+			</swiper> -->
+			<view class="mb58">{{ couple.groom.name }} & {{ couple.bride.name }}</view>
 			<view>携同我们的父母</view>
 			<view>邀请您出席我们的婚礼仪式</view>
 			<view>见证和分享我们的幸福时刻</view>
@@ -240,17 +240,6 @@
 		</view>
 
 		<view class="tc lh21 mb100">
-			<image class="img-full-width mb58" :src="imgs.end2" mode="widthFix" />
-			<view class="tr mb100">
-				<view>我把我的整个灵魂都给你</view>
-				<view>连同它的怪癖</view>
-				<view>耍小脾气，忽明忽暗</view>
-				<view>一千八百种坏毛病</view>
-				<view>它真讨厌</view>
-				<view class="mb58">只有一点好，爱你</view>
-				<view>/ 爱你就像爱生命 /</view>
-				<view>/ 王小波 /</view>
-			</view>
 			<image class="img-end"
 				src="https://h5cdn.hunbei.com/editorCustomPic/2022-8-19-niYXMwfBrA5bCeRQSFnXRRKRmcSnmfEC.png?imageMogr2/auto-orient/thumbnail/519x264>/format/webp"
 				mode="aspectFit" />
@@ -295,9 +284,9 @@
 			<view class="greetings-list">
 				<view :class="'greetings-item ' + (activeIdx === index ? 'active' : '')" @animationend="onAnimationend"
 					v-for="(item, index) in greetings" :key="index">
-					<text class="greetings-name">{{ item.name }}：</text>
+					<text class="greetings-name">{{ item.visitor.name }}：</text>
 
-					{{ item.desc || '新婚快乐' }}
+					{{ item.message || '新婚快乐' }}
 				</view>
 			</view>
 			<view class="controller">
@@ -312,17 +301,12 @@
 				</view>
 			</view>
 		</view>
-
-		<!-- 公告栏入口 -->
-		<view v-if="isAdmin" class="manager">
-			<image @tap="goInfo" src="/static/images/icon/manager.png" mode="widthFix" />
-		</view>
 	</view>
 </template>
 
 <script lang="ts" setup>
 import { onLoad, onReady, onShareAppMessage, onShareTimeline, onShow, onUnload } from '@dcloudio/uni-app';
-import { getAllMessageList, getCommonConfig } from '@src/api/wedding-invitation';
+import { getAllMessageList, getCommonConfig } from '@src/api/happy-wedding';
 import calendar from '@src/component/calendar/calendar.vue';
 import channel from '@src/component/channel/channel.vue';
 import { GlobalData } from '@src/types';
@@ -352,14 +336,11 @@ const weddingTimeStr = [
 const showEggs = true;
 const greetings = ref([])
 
-
 const innerAudioContext = globalData.innerAudioContext
 const music = ref({
-	src: import.meta.env.VITE_VUE_APP_API + '/public/wedding-invitation/yangming/music/gbqq.mp3',
-	name: '告白气球',
-	singer: '周杰伦',
-	paused: false,
-	autoPlay: true
+	src: 'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/music/%E4%BD%A0%E6%98%AF%E5%AF%B9%E7%9A%84%E4%BA%BA.flac',
+	name: '你是对的人',
+	singer: '戚薇&俊昊'
 })
 const isPlaying = ref(false)
 const location = {
@@ -379,58 +360,59 @@ const location = {
 const publisher = '杨沙组合'
 const anniversary = '2021.06.12'
 
-const couple = [
-	{
-		name: '杨明',
-		alias: '新郎'
+const couple = {
+	groom: {
+		name: '',
+		phone: ''
 	},
-	{
-		name: '沙妍',
-		alias: '新娘'
+	bride: {
+		name: '',
+		phone: ''
 	}
-]
+}
+
 const magic = ref(true);
 
 const imgs = {
 	// 封面图
-	cover: 'https://res.wx.qq.com/t/fed_upload/459fb8da-b31a-420f-b8cc-f51126952685/cover.jpg',
+	cover: 'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/other/%E5%B0%81%E9%9D%A2%E5%9B%BE1.jpg',
 	// 音乐封面
-	poster: 'https://res.wx.qq.com/t/fed_upload/d811d254-e5d6-4c19-9ff8-77c4b6128137/poster.jpg',
+	poster: 'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E9%9F%B3%E4%B9%90%E5%B0%81%E9%9D%A2.jpg',
 	// 新郎独照
-	husband: 'https://res.wx.qq.com/t/fed_upload/d811d254-e5d6-4c19-9ff8-77c4b6128137/husband.jpg',
+	husband: 'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E6%96%B0%E9%83%8E%E7%8B%AC%E7%85%A7.jpg',
 	// 新娘独照
-	wife: 'https://res.wx.qq.com/t/fed_upload/d811d254-e5d6-4c19-9ff8-77c4b6128137/wife.jpg',
+	wife: 'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E6%96%B0%E5%A8%98%E7%8B%AC%E7%85%A7.jpg',
 	// 轮播图1
 	swiper1: [
-		'https://res.wx.qq.com/t/fed_upload/849dfcf2-049a-42ba-9f6c-ddd6f30b8487/swiper1-1.jpg',
-		'https://res.wx.qq.com/t/fed_upload/849dfcf2-049a-42ba-9f6c-ddd6f30b8487/swiper1-2.jpg',
-		'https://res.wx.qq.com/t/fed_upload/849dfcf2-049a-42ba-9f6c-ddd6f30b8487/swiper1-3.jpg'
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E8%BD%AE%E6%92%AD%E5%9B%BE%201-1.jpg',
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E8%BD%AE%E6%92%AD%E5%9B%BE%201-2.jpg',
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E8%BD%AE%E6%92%AD%E5%9B%BE1-3.jpg'
 	],
 	// 连续图
 	series: [
-		'https://res.wx.qq.com/t/fed_upload/c707cb28-126b-4a5d-89f6-688551456d15/series1.jpg',
-		'https://res.wx.qq.com/t/fed_upload/c707cb28-126b-4a5d-89f6-688551456d15/series2.jpg',
-		'https://res.wx.qq.com/t/fed_upload/c707cb28-126b-4a5d-89f6-688551456d15/series3.jpg'
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E8%BF%9E%E7%BB%AD%E5%9B%BE%201.jpg',
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E8%BF%9E%E7%BB%AD%E5%9B%BE%202.jpg',
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E8%BF%9E%E7%BB%AD%E5%9B%BE%203.jpg'
 	],
 	// 左上图
-	leftUp: 'https://res.wx.qq.com/t/fed_upload/50898c02-4dd4-480a-ba6c-b175461b7b31/left-up.jpg',
+	leftUp: 'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E5%B7%A6%E4%B8%8A%E5%9B%BE.jpg',
 	// 左下图
-	leftDown: 'https://res.wx.qq.com/t/fed_upload/50898c02-4dd4-480a-ba6c-b175461b7b31/left-down.jpg',
+	leftDown: 'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/9Z7A1035.jpg',
 	// 四宫图
 	map: [
-		'https://res.wx.qq.com/t/fed_upload/b959a506-ca42-47e1-9fbd-732a6151e3d9/map1.jpg',
-		'https://res.wx.qq.com/t/fed_upload/b959a506-ca42-47e1-9fbd-732a6151e3d9/map2.jpg',
-		'https://res.wx.qq.com/t/fed_upload/b959a506-ca42-47e1-9fbd-732a6151e3d9/map3.jpg',
-		'https://res.wx.qq.com/t/fed_upload/b959a506-ca42-47e1-9fbd-732a6151e3d9/map4.jpg'
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E5%9B%9B%E5%AE%AB%E6%A0%BC%201.jpg',
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E5%9B%9B%E5%AE%AB%E6%A0%BC%202.jpg',
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E5%9B%9B%E5%AE%AB%E6%A0%BC%204.jpg',
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E5%9B%9B%E5%AE%AB%E6%A0%BC%203.jpg'
 	],
 	// 轮播图2
 	swiper2: [
-		'https://res.wx.qq.com/t/fed_upload/65134c0f-c513-410e-b4ff-ab738801540f/swiper2-1.jpg',
-		'https://res.wx.qq.com/t/fed_upload/65134c0f-c513-410e-b4ff-ab738801540f/swiper2-2.jpg',
-		'https://res.wx.qq.com/t/fed_upload/65134c0f-c513-410e-b4ff-ab738801540f/swiper2-3.jpg'
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E8%BD%AE%E6%92%AD%E5%9B%BE%202-1.jpg',
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E8%BD%AE%E6%92%AD%E5%9B%BE%202-2.jpg',
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E8%BD%AE%E6%92%AD%E5%9B%BE%202-3.jpg'
 	],
 	// 轮播图2下方常驻图
-	swiper2Static: 'https://res.wx.qq.com/t/fed_upload/30d86ea7-84b8-46ce-ae60-e31b83a04fcc/swiper2-static.jpg',
+	swiper2Static: 'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/9Z7A0687.jpg',
 	// 轮播图3
 	swiper3: [
 		'https://res.wx.qq.com/t/fed_upload/77b990f0-6f16-4fa2-8163-ad0eac3e40da/swiper3-1.jpg',
@@ -438,7 +420,7 @@ const imgs = {
 		'https://res.wx.qq.com/t/fed_upload/77b990f0-6f16-4fa2-8163-ad0eac3e40da/swiper3-3.jpg'
 	],
 	// 结尾图1
-	end1: 'https://res.wx.qq.com/t/fed_upload/9b5bad9c-216b-4fd5-a3da-01bdb3a5e832/end1.jpg',
+	end1: 'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E7%BB%93%E5%B0%BE%E5%9B%BE.jpg',
 	// 结尾图2
 	end2: 'https://res.wx.qq.com/t/fed_upload/9b5bad9c-216b-4fd5-a3da-01bdb3a5e832/end2.jpg'
 }
@@ -484,6 +466,8 @@ onMounted(() => {
 	magic.value = globalData.magic;
 	getCommonConfig().then(res => {
 		adminsIds.value = res.data.adminOpenIds
+		couple.groom = res.data.groom
+		couple.bride = res.data.bride
 	})
 	setInterval(() => now.value = Date.now(), 1000)
 })
@@ -495,6 +479,7 @@ onLoad(() => {
 	innerAudioContext.onPlay(onPlay)
 	innerAudioContext.onPause(onPause)
 	innerAudioContext.src = music.value.src
+	innerAudioContext.loop = true
 })
 
 const onPlay = () => {
@@ -517,10 +502,6 @@ onUnload(() => {
 		clearInterval(timer.value);
 		timer.value = null;
 	}
-	// if (music.value !== null) {
-	// 	music.value.destroy();
-	// 	this.music = null;
-	// }
 })
 
 
@@ -550,35 +531,18 @@ const toggleMusic = () => {
 	}
 }
 const openLocation = () => {
-	// uni.switchTab({
-	// 	url: '../map/index'
-	// });
 	wx.openLocation({
-    latitude: Number(location.latitude),
-    longitude: Number(location.longitude),
-    scale: 18
-  })
+		latitude: Number(location.latitude),
+		longitude: Number(location.longitude),
+		scale: 18
+	})
 }
-
-// 呼叫
-const call = (e) => {
-	uni.makePhoneCall({
-		phoneNumber: e.target.dataset.phone
-	});
-}
-
-
 
 // 轮播动画结束时切换到下一个
 const onAnimationend = () => {
 	activeIdx.value = activeIdx.value === greetings.value.length - 1 ? 0 : activeIdx.value + 1;
 }
 
-const goPresent = () => {
-	uni.switchTab({
-		url: '../present/index'
-	});
-}
 // 跳转到联系新郎新娘板块
 const goPhone = () => {
 	uni.switchTab({
@@ -593,12 +557,6 @@ const goGreet = () => {
 	})
 }
 
-// 跳转到公告栏页面
-const goInfo = () => {
-	uni.navigateTo({
-		url: '../info/index'
-	});
-}
 </script>
 <style lang="scss" scoped>
 @import '../../common/base.css';

@@ -4,18 +4,18 @@
     <scroll-view scroll-y v-if="magic" class="box">
       <p class="place"></p>
       <div class="item" v-for="(item, index) in messageList" :key="index">
-        <image class="left" :src="item.url" />
+        <image class="left" :src="item.visitor.avatarUrl" />
         <div class="right">
           <div class="top">
-            <uni-tag v-if="item.customIndex === 0" text="置顶" type="success" @click="copy(item)" />
+            <uni-tag v-if="item.customIndex === 0" text="⬆️" type="success" @click="copy(item)" />
             <div class="delete">
               <image src="../../static/images/close.png" class="delete_icon" @click="deleteMessage(item)"
-                v-if="item.openid === openId || isAdmin" />
+                v-if="isAdmin" />
             </div>
-            <span class="top-l">{{ item.name }}</span>
-            <span class="top-r">{{ formatDateTime(item.time) }}</span>
+            <span class="top-l">{{ item.visitor.name }}</span>
+            <span class="top-r">{{ formatDateTime(item.createdAt) }}</span>
           </div>
-          <p class="con">{{ item.desc }}</p>
+          <p class="con">{{ item.message }}</p>
         </div>
       </div>
       <p class="place-end"></p>
@@ -34,7 +34,7 @@
     <scroll-view scroll-y class="image-box">
       <div class="image-item" v-for="(item, index) in userList" :key="index">
         <view class="cu-avatar round lg" :style="{
-          'background-image': `url(${item.user.avatarUrl})`
+          'background-image': `url(${item.avatarUrl})`
         }"></view>
         <!-- <p>{{ item.user.nickName }}</p> -->
       </div>
@@ -95,7 +95,7 @@ import {
   getUserByOpenId,
   uploadAvatar,
   deleteMessage as deleteMessageApi,
-} from '@src/api/wedding-invitation'
+} from '@src/api/happy-wedding'
 import { onShareAppMessage, onShareTimeline, onShow } from '@dcloudio/uni-app'
 
 const isOpen = ref(false)
@@ -136,7 +136,6 @@ onShow(() => {
   isForm.value = false
   isFormlist.value = false
   getMessageList()
-
 })
 
 onMounted(() => {
@@ -185,9 +184,8 @@ const onConfirm = e => {
   modalName.value = null
 
   const openId = instance.appContext.config.globalProperties.$MpUserData.openId
-  uploadAvatar(avatarUrl.value, {
-    openId
-  }).then(res => {
+  uploadAvatar(avatarUrl.value, openId)
+  .then(res => {
     addOrUpdateUser({
       openid: openId,
       user: {
@@ -214,7 +212,7 @@ const onConfirm = e => {
 
 const sendGreet = e => {
 
-  if (instance.appContext.config.globalProperties.$MpUserData?.user) {
+  if (instance.appContext.config.globalProperties.$MpUserData?.name) {
     showToast('您已经送过祝福了~')
   } else {
     addUser()
@@ -245,7 +243,7 @@ const copy = item => {
 }
 
 const toMessage = e => {
-  if (instance.appContext.config.globalProperties.$MpUserData?.user) {
+  if (instance.appContext.config.globalProperties.$MpUserData?.name) {
     isOpen.value = true
   } else {
     modalName.value = 'Modal'
@@ -258,14 +256,9 @@ const cancel = () => {
 
 const sendMessage = () => {
   if (desc.value) {
-    addMessage({
-      desc: desc.value,
-      type: 'message',
-      time: getNowFormatDate(),
-      url: instance.appContext.config.globalProperties.$MpUserData?.user.avatarUrl,
-      name: instance.appContext.config.globalProperties.$MpUserData?.user.nickName,
-      openid: instance.appContext.config.globalProperties.$MpUserData.openId
-    }).then(res => {
+    addMessage(desc.value,
+      instance.appContext.config.globalProperties.$MpUserData.openId
+    ).then(res => {
       isOpen.value = false
       desc.value = ''
       getMessageList()

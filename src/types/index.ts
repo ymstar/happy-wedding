@@ -5,10 +5,8 @@ export type GlobalData = {
 		id: string,
 		userId: string,
 		openid: string,
-		user: {
-			nickName: string,
-			avatarUrl: string
-		},
+		name: string,
+		avatarUrl: string,
 		createdAt: string,
 		updatedAt: string
 	},

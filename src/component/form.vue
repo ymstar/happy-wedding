@@ -9,7 +9,7 @@
     <radio-group @change="radioChange" class="group">
       <label class="radio" v-for="(item, index) in list" :key="index">
         <radio :value="item.name" :checked="item.checked" />
-        {{ item.value }}
+        {{ item.name }}
       </label>
     </radio-group>
     <p class="title">备注</p>
@@ -23,35 +23,35 @@
 </template>
 
 <script lang="ts" setup>
-import { addOrUpdatePresent } from '@src/api/wedding-invitation'
+import { addOrUpdatePresent } from '@src/api/happy-wedding'
 import { showToast } from '@src/utils'
 import { getCurrentInstance, ref } from 'vue'
 const list = ref([
   {
     name: '自己出席',
-    value: '自己出席',
+    value: 1,
     checked: true
   },
   {
     name: '两人出席',
-    value: '两人出席',
+    value: 2,
     checked: false
   },
   {
     name: '三人出席',
-    value: '三人出席',
+    value: 3,
     checked: false
   },
   {
     name: '三人以上',
-    value: '三人以上',
+    value: 4,
     checked: false
   }
 ])
 const desc = ref('')
 const name = ref('')
-const phone = ref('asdasd')
-const count = ref('自己出席')
+const phone = ref('')
+const count = ref(1)
 const phoneFlag = ref(false)
 const _id = ref('')
 
@@ -59,14 +59,10 @@ const instance = getCurrentInstance()
 const $emit = defineEmits(['closeForm'])
 const openId = instance.appContext.config.globalProperties.$MpUserData?.openId
 
-const cancel = () => {
-  $emit('closeForm')
-}
-
 const radioChange = e => {
   count.value = e.detail.value
   list.value.forEach(item => {
-    if (item.name === count.value) {
+    if (item.value === count.value) {
       item.checked = true
     } else {
       item.checked = false
@@ -103,7 +99,7 @@ const addPresent = () => {
     name: name.value,
     phone: phone.value,
     count: count.value,
-    desc: desc.value,
+    description: desc.value,
     openid: openId
   }).then(res => {
     showToast('登记成功！期待您的到临~')

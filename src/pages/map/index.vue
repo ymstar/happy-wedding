@@ -34,11 +34,11 @@
           style="left: 52.5px; top: 719.5px; width: 86px; height: 86px; transform: rotate(0deg);">
           <div class="ani-wrap"><!---->
             <div class="rotate-wrap"
-              style="-webkit-mask-box-image-source: url('https://wedding.sym930302.xyz/public/wedding-invitation/yangming/index-banner/_VqyrvQi6do.jpg');">
+              style="-webkit-mask-box-image-source: url('https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E6%96%B0%E9%83%8E%E7%8B%AC%E7%85%A7.jpg');">
               <div class="ele-img-bg"
                 style="font-family: 微软雅黑; font-size: 12px; color: rgb(0, 0, 0); opacity: 1; border-radius: 43px; border-width: 0px; border-style: solid; border-color: rgb(153, 153, 153); box-shadow: rgb(153, 153, 153) 0px 0px 0px; transform: none;">
                 <div class="ele-bg-wrap"
-                  style="background-image: url('https://wedding.sym930302.xyz/public/wedding-invitation/yangming/index-banner/_VqyrvQi6do.jpg');">
+                  style="background-image: url('https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E6%96%B0%E9%83%8E%E7%8B%AC%E7%85%A7.jpg');">
                 </div>
               </div>
             </div>
@@ -63,11 +63,11 @@
           style="left: 52.5px; top: 719.5px; width: 86px; height: 86px; transform: rotate(0deg);">
           <div class="ani-wrap"><!---->
             <div class="rotate-wrap"
-              style="-webkit-mask-box-image-source: url('https://wedding.sym930302.xyz/public/wedding-invitation/yangming/index-banner/_VqyrvQi6do.jpg');">
+              style="-webkit-mask-box-image-source: url('https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E6%96%B0%E5%A8%98%E7%8B%AC%E7%85%A7.jpg');">
               <div class="ele-img-bg"
                 style="font-family: 微软雅黑; font-size: 12px; color: rgb(0, 0, 0); opacity: 1; border-radius: 43px; border-width: 0px; border-style: solid; border-color: rgb(153, 153, 153); box-shadow: rgb(153, 153, 153) 0px 0px 0px; transform: none;">
                 <div class="ele-bg-wrap"
-                  style="background-image: url('https://wedding.sym930302.xyz/public/wedding-invitation/yangming/index-banner/_VqyrvQi6do.jpg');">
+                  style="background-image: url('https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E6%96%B0%E5%A8%98%E7%8B%AC%E7%85%A7.jpg');">
                 </div>
               </div>
             </div>
@@ -104,7 +104,7 @@
 </template>
 <script setup lang="ts">
 import { onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app'
-import { getCommonConfig, getPresentList } from '@src/api/wedding-invitation'
+import { getCommonConfig, getPresentList } from '@src/api/happy-wedding'
 import { GlobalData } from '@src/types'
 import { getCurrentInstance, onMounted, ref } from 'vue'
 
@@ -122,15 +122,13 @@ const markers = ref([
     id: 1,
     width: 50,
     height: 50,
-    latitude: '31.2304',
-    longitude: '121.4737'
+    latitude: '41.14362085312474',
+    longitude: '114.71974055581438'
   }
 ])
 
 const heNumber = ref('')
 const sheNumber = ref('')
-const hotelNumber = ref('')
-const transportNumber = ref('')
 const activeTab = ref(0)
 const activeMarker = ref(markers.value[activeTab.value])
 const presentExist = ref(false)
@@ -141,21 +139,19 @@ const openId = globalData.mpUserInfo.openId
 
 onMounted(() => {
   getPresentList(openId).then(res => {
-    if (res?.data?.length) {
+    if (res.data) {
       presentExist.value = true
     }
   })
   getCommonConfig().then(res => {
-    heNumber.value = res.data.heNumber
-    sheNumber.value = res.data.sheNumber
+    heNumber.value = res.data.groom.phone
+    sheNumber.value = res.data.bride.phone
     markers.value[0].latitude = res.data.location.latitude
     markers.value[0].longitude = res.data.location.longitude
     if (presentExist.value) {
       markers.value[1].latitude = res.data.location.hotelLatitude
       markers.value[1].longitude = res.data.location.hotelLongitude
     }
-    hotelNumber.value = res.data.info.hotelNumber
-    transportNumber.value = res.data.info.transportNumber
   })
 })
 
@@ -194,18 +190,6 @@ const linkShe = () => {
   })
 }
 
-const linkHotel = () => {
-  wx.makePhoneCall({
-    phoneNumber: hotelNumber.value
-  })
-}
-
-const linkTransport = () => {
-  wx.makePhoneCall({
-    phoneNumber: hotelNumber.value
-  })
-}
-
 const switchLocation = (index) => {
   activeTab.value = index
   wx.createMapContext('map').moveToLocation({
@@ -218,7 +202,7 @@ const switchLocation = (index) => {
 <style lang="scss" scoped>
 .map {
   position: relative;
-  height: 600px;
+  height: 100%;
   background: #fff;
 
   .head-img {
@@ -241,6 +225,7 @@ const switchLocation = (index) => {
     border-radius: 20rpx;
     box-shadow: rgb(153, 153, 153) 0 0 10rpx;
     padding: 20rpx;
+    margin-top: 20px;
     margin-left: 40rpx;
     margin-right: 40rpx;
     line-height: 1.5;

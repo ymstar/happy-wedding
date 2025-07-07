@@ -1,13 +1,17 @@
 <template>
   <div class="photo">
     <image class="bg-image" :src="background" />
+    <swiper current=0 indicator-dots=true class="banner_style" autoplay=true interval=2600 duration=1200>
+      <block v-for="(item, index) in bannerList" :key="index">
+        <swiper-item>
+          <image :src="item.url" class="banner_image_style" mode="aspectFill" />
+        </swiper-item>
+      </block>
+    </swiper>
     <div class="grid-container">
       <div v-for="(item, index) in list" :key="index" class="grid-item" :style="{ animationDelay: `${index * 0.1}s` }"
         @click="previewImage(index)">
-        <image mode="aspectFill" class="grid-image" :src="item.url" @error="handleImageError(index)" />
-
-        <!-- 修改后 -->
-        <text class="debug-url" style="display: none">{{ item.url }}</text>
+        <image mode="aspectFill" class="grid-image" :src="item.url" />
       </div>
     </div>
   </div>
@@ -24,9 +28,10 @@ import { getCurrentInstance, onMounted, ref } from 'vue'
 import HSwiper from '@src/component/swiper.vue'
 import HVideo from '@src/component/video.vue'
 import { onHide, onShareAppMessage, onShareTimeline, onShow } from '@dcloudio/uni-app'
-import { getResouces, getCommonConfig } from '@src/api/wedding-invitation'
+import { getResouces, getCommonConfig } from '@src/api/happy-wedding'
 import { GlobalData } from '@src/types'
 
+const bannerList = ref([])
 const list = ref([])
 const isGif = ref(false)
 const background = ref('')
@@ -57,22 +62,22 @@ onHide(() => {
 
 // 分享到会话
 onShareAppMessage(() => {
-	return {
-		title: '好久不见，婚礼见٩(๑^o^๑)۶',
-		imageUrl: '../../static/images/shareAppMsg.jpg'
-	};
+  return {
+    title: '好久不见，婚礼见٩(๑^o^๑)۶',
+    imageUrl: '../../static/images/shareAppMsg.jpg'
+  };
 })
 
 // 分享到朋友圈
 onShareTimeline(() => {
-	return {
-		title: '好久不见，婚礼见٩(๑^o^๑)۶',
-		imageUrl: '../../static/images/shareTimeline.jpg'
-	};
+  return {
+    title: '好久不见，婚礼见٩(๑^o^๑)۶',
+    imageUrl: '../../static/images/shareTimeline.jpg'
+  };
 })
 
 const getList = () => {
-  getResouces('photo-banner').then(res => {
+  getResouces('photo').then(res => {
     let result = []
     for (let i = 0; i < res.data.length; i++) {
       let show = i === 0
@@ -83,6 +88,17 @@ const getList = () => {
     }
     list.value = result
   })
+  getResouces('photo-banner').then(res => {
+    let result = []
+    for (let i = 0; i < res.data.length; i++) {
+      let show = i === 0
+      result.push({
+        url: res.data[i].url,
+        show: show
+      })
+    }
+    bannerList.value = result
+  })
 }
 
 const previewImage = (index: number) => {
@@ -90,10 +106,6 @@ const previewImage = (index: number) => {
     current: index,
     urls: list.value.map(item => item.url)
   })
-}
-// 新增错误处理逻辑
-const handleImageError = (index) => {
-  list.value[index].url = 'http://47.94.242.222/public/wedding-invitation/yangming/index-banner/YRlczN57hpY.jpg'
 }
 
 const toVideo = () => {
@@ -161,6 +173,18 @@ const getVideoUrl = () => {
       }
     }
   }
+
+  .banner_style {
+    padding: 20rpx;
+    height: 200px;
+    border-radius: 10px;
+  }
+
+  .banner_image_style {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
 
   @keyframes scaleUp {
     from {

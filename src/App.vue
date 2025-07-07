@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onLaunch, onShow, onHide, onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app'
 import { getCurrentInstance, onMounted } from 'vue'
-import { code2Session, getUserByOpenId } from './api/wedding-invitation'
+import { code2Session, getUserByOpenId } from './api/happy-wedding'
 
 onLaunch(() => {
   console.log('App Launch')
@@ -71,7 +71,6 @@ uni.getSystemInfo({
 @import 'common/colorui/animation.css';
 
 page {
-  padding-top: 15px;
   height: 100%;
 }
 

@@ -4,7 +4,7 @@ import './animate.scss'
 
 import App from './App.vue'
 import { GlobalData } from './types'
-import { code2Session, getCommonConfig, getResouces, getUserByOpenId } from './api/wedding-invitation'
+import { code2Session, getCommonConfig, getResouces, getUserByOpenId } from './api/happy-wedding'
 
 wx.setInnerAudioOption({
   obeyMuteSwitch: false,
@@ -23,10 +23,8 @@ const userInfo = ref({
   id: "",
   userId: "",
   openid: "",
-  user: {
-    nickName: "",
-    avatarUrl: ""
-  },
+  name: "",
+  avatarUrl: "",
   createdAt: "",
   updatedAt: ""
 })
@@ -112,7 +110,7 @@ getResouces('music').then(res => {
   // innerAudioContext.src = globalData.musicList[0].url
 })
 getCommonConfig().then(res => {
-  globalData.magic = res.data.info.magicSwitch as boolean
+  globalData.magic = !res.data.magicSwitch as boolean
 })
 
 export function createApp() {

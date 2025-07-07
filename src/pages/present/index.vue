@@ -13,7 +13,7 @@
 import { ref, getCurrentInstance } from 'vue'
 import HForm from '@src/component/form.vue'
 import HFormlist from '@src/component/formlist.vue'
-import { getPresentList, addOrUpdatePresent } from '@src/api/wedding-invitation'
+import { getPresentList, addOrUpdatePresent } from '@src/api/happy-wedding'
 import { onShareAppMessage, onShareTimeline, onShow } from '@dcloudio/uni-app'
 import { GlobalData } from '@src/types'
 
@@ -47,15 +47,15 @@ const getIsPresentExist = () => {
     const formData: any = {
       dataFlag: false,
       id: '',
-      name: instance.appContext.config.globalProperties.$MpUserData?.user.nickName
+      name: instance.appContext.config.globalProperties.$MpUserData?.name
     }
-    if (res?.data?.length) {
-      formData.name = res.data?.[0]?.name
-      formData.phone = res.data?.[0]?.phone
-      formData.count = res.data?.[0]?.count
+    if (res?.data) {
+      formData.name = res.data?.name
+      formData.phone = res.data?.phone
+      formData.count = res.data?.count
       formData.phoneFlag = true
-      formData.id = res.data?.[0]?.id
-      formData.desc = res.data?.[0]?.desc
+      formData.id = res.data?.id
+      formData.desc = res.data?.description
     }
     formRef.value.updateForm(formData)
   })

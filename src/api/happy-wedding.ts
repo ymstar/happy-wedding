@@ -6,7 +6,7 @@ import { http } from './service'
  */
 export function getCommonConfig() {
   return http.request({
-    url: '/api/wedding-invitation/getCommonConfig',
+    url: '/api/happy-wedding/business/getCommonConfig',
     method: 'GET',
     params: {
       userId: import.meta.env.VITE_VUE_APP_USERID as string
@@ -18,9 +18,9 @@ export function getCommonConfig() {
  * 获取资源配置
  * @returns
  */
-export function getResouces(type: 'music' | 'photo-banner' | 'index-banner') {
+export function getResouces(type: 'music' | 'photo-banner' | 'photo') {
   return http.request({
-    url: '/api/wedding-invitation/getResouces',
+    url: '/api/happy-wedding/business/getResources',
     method: 'GET',
     params: {
       type,
@@ -35,7 +35,7 @@ export function getResouces(type: 'music' | 'photo-banner' | 'index-banner') {
  */
 export function getAllMessageList() {
   return http.request({
-    url: '/api/wedding-invitation/getMessageList',
+    url: '/api/happy-wedding/business/getMessageList',
     method: 'GET',
     params: {
       userId: import.meta.env.VITE_VUE_APP_USERID as string
@@ -48,13 +48,14 @@ export function getAllMessageList() {
  * @param data
  * @returns
  */
-export function addMessage(data) {
+export function addMessage(message:string, openId:string) {
   return http.request({
-    url: '/api/wedding-invitation/addMessage',
+    url: '/api/happy-wedding/business/addMessage',
     method: 'POST',
-    data,
     params: {
-      userId: import.meta.env.VITE_VUE_APP_USERID as string
+      userId: import.meta.env.VITE_VUE_APP_USERID as string,
+      message: message,
+      openId: openId
     }
   })
 }
@@ -66,52 +67,54 @@ export function addMessage(data) {
  */
 export function deleteMessage(id) {
   return http.request({
-    url: '/api/wedding-invitation/deleteMessage',
+    url: '/api/happy-wedding/business/deleteMessage',
     method: 'POST',
     params: {
-      id,
+      messageId: id,
       userId: import.meta.env.VITE_VUE_APP_USERID as string
     }
   })
 }
 
 /**
- * 通过 openId 获取用户
+ * 通过 openId 获取访客信息
  * @returns
  */
 export function getUserByOpenId(openid) {
   return http.request({
-    url: '/api/wedding-invitation/getUserByOpenId',
+    url: '/api/happy-wedding/business/getVisitorByOpenId',
     method: 'GET',
     params: {
       userId: import.meta.env.VITE_VUE_APP_USERID as string,
-      openid
+      openId: openid
     }
   })
 }
 
 /**
- * 通过 openId 获取用户
+ * 新增访客
  * @returns
  */
 export function addOrUpdateUser(data) {
   return http.request({
-    url: '/api/wedding-invitation/addOrUpdateUser',
-    data,
+    url: '/api/happy-wedding/business/addOrUpdateVisitor',
     method: 'POST',
     params: {
-      userId: import.meta.env.VITE_VUE_APP_USERID as string
+      userId: import.meta.env.VITE_VUE_APP_USERID as string,
+      openId: data.openid,
+      nickName: data.user.nickName,
+      avatarUrl: data.user.avatarUrl
     }
   })
 }
 
 /**
- * 获取用户列表
+ * 获取访客列表
  * @returns
  */
 export function getFriendUserList() {
   return http.request({
-    url: '/api/wedding-invitation/getUserList',
+    url: '/api/happy-wedding/business/getVisitorList',
     method: 'GET',
     params: {
       userId: import.meta.env.VITE_VUE_APP_USERID as string
@@ -125,10 +128,10 @@ export function getFriendUserList() {
  */
 export function getPresentList(openid?) {
   return http.request({
-    url: '/api/wedding-invitation/getPresentList',
+    url: '/api/happy-wedding/business/getPresent',
     method: 'GET',
     params: {
-      openid,
+      openId: openid,
       userId: import.meta.env.VITE_VUE_APP_USERID as string
     }
   })
@@ -140,7 +143,7 @@ export function getPresentList(openid?) {
  */
 export function addOrUpdatePresent(data) {
   return http.request({
-    url: '/api/wedding-invitation/addOrUpdatePresent',
+    url: '/api/happy-wedding/business/addPresent',
     method: 'POST',
     data,
     params: {
@@ -155,7 +158,7 @@ export function addOrUpdatePresent(data) {
  */
 export function code2Session(jsCodeMP: string) {
   return http.request({
-    url: '/api/wechat/code2Session',
+    url: '/api/happy-wedding/wechat/code2Session',
     method: 'GET',
     params: {
       jsCodeMP,
@@ -170,13 +173,13 @@ export function code2Session(jsCodeMP: string) {
  * @param openId
  * @returns
  */
-export function uploadAvatar(filePath, formData) {
-  return http.upload('/api/wedding-invitation/uploadAvatar', {
+export function uploadAvatar(filePath, openid) {
+  return http.upload('/api/happy-wedding/business/uploadAvatar', {
     filePath,
     name: 'file',
-    formData,
     params: {
-      userId: import.meta.env.VITE_VUE_APP_USERID as string
+      userId: import.meta.env.VITE_VUE_APP_USERID as string, 
+      openId: openid
     }
   })
 }
