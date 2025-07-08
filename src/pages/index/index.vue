@@ -252,34 +252,28 @@
 				<image src="/static/images/icon/egg.png" mode="aspectFit" />
 			</view>
 			<view class="mb28">
-				该小程序由新郎哥本人（也就是我了😎）独立完成开发，参考了婚贝上的一个模板，结合了一些开源项目，同时也少不了 AI 的帮助（不咋会写前端页面😜）
+				此小程序由新郎哥本人独立完成开发😜，如果有 bug 的话敬请谅解，如果能反馈给我的话就更好了😍
 			</view>
-			<!-- <view class="mb28">最后是喜闻乐见的撒狗粮环节✿✿ヽ(°▽°)ノ✿，首先出场的是我们的求婚视频☺️</view> -->
 
-			<!-- 如果要加视频号的话可以用我封装好的channel组件，小程序个人号也能使用视频号卡片样式，参数和官方提供的channel-video基本一致 -->
+			<view class="mb28">
+				小程序前端代码以开源，感兴趣的小伙伴可以上 github 自取：https://github.com/ymstar/happy-wedding
+			</view>
+
+			<view class="mb28">最后放上我们的三生三世视频✿✿ヽ(°▽°)ノ✿☺️</view>
+
 			<view v-if="magic" class="mb58">
 				<channel finder-user-name="sphnQSkTBRwbRTK"
-					feed-id="export/UzFfAgtgekIEAQAAAAAARnUT9wEzMAAAAAstQy6ubaLX4KHWvLEZgBPE1aM4GWxLPt_4zNPgMJpMMeMSpJqTE7PNc6BZeDwv"
-					poster="https://h5cdn.hunbei.com/h5MobileUpload/2025-5-23-rdXGCZjWhZcGhJQRWJ2NcTzmGKmx7jfE"
-					nickname="全村人的希望"></channel>
+					feed-id="export/UzFfAgtgekIEAQAAAAAAwXcqT9uO3AAAAAstQy6ubaLX4KHWvLEZgBPElaBoJkt9KpyIzNPgMJoaUAjdYlpRj52z8YxKBNxQ"
+					poster="https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E8%A7%86%E9%A2%91%E5%B0%81%E9%9D%A2.jpg"
+					nickname="杨明"></channel>
 			</view>
 
-			<!-- <view class="mb28">然后当然少不了我们在苗寨拍的艺术照啦哈哈哈哈😄</view> -->
-
-			<!-- 如果要加视频号的话可以用我封装好的channel组件，小程序个人号也能使用视频号卡片样式，参数和官方提供的channel-video基本一致 -->
-			<!-- <view class="mb58">
-				<channel finder-user-name="sphnQSkTBRwbRTK"
-					feed-id="export/UzFfAgtgekIEAQAAAAAARnUT9wEzMAAAAAstQy6ubaLX4KHWvLEZgBPE1aM4GWxLPt_4zNPgMJpMMeMSpJqTE7PNc6BZeDwv"
-					poster="https://h5cdn.hunbei.com/h5MobileUpload/2025-5-23-rdXGCZjWhZcGhJQRWJ2NcTzmGKmx7jfE"
-					nickname="全村人的希望"></channel>
-			</view> -->
-
-			<view class="mb28">好啦，狗粮撒到这里就差不多啦，剩下的我们留到婚礼上再呈现给大家吧，我们婚礼上见哦~💒👫🏻</view>
+			<view class="mb28">好啦，狗粮撒到这里就差不多啦，我们婚礼上见哦~💒👫🏻</view>
 			<view>未完，待续</view>
 			<view>爱，我们一直在路上</view>
 		</view>
 
-		<!-- 祝福语轮播以及底部快捷跳转 -->
+
 		<view v-if="magic" class="greetings">
 			<view class="greetings-list">
 				<view :class="'greetings-item ' + (activeIdx === index ? 'active' : '')" @animationend="onAnimationend"
@@ -329,9 +323,9 @@ const activeIdx = ref(0);
 const weddingTimeStr = [
 	'2025-10-02 11:30',
 	'秋',
-	'2025 年 10 月 2号  11:00',
+	'2025 年 10 月 2号  11:30',
 	'农历八月十一',
-	'10 月 2 号'
+	' 10 月 2 号 '
 ]
 const showEggs = true;
 const greetings = ref([])
@@ -480,6 +474,10 @@ onLoad(() => {
 	innerAudioContext.onPause(onPause)
 	innerAudioContext.src = music.value.src
 	innerAudioContext.loop = true
+})
+
+onShow(()=>{
+	innerAudioContext.play()
 })
 
 const onPlay = () => {

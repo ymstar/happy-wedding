@@ -176,7 +176,7 @@ const getVideoUrl = () => {
 
   .banner_style {
     padding: 20rpx;
-    height: 200px;
+    height: 300px;
     border-radius: 10px;
   }
 

@@ -7,7 +7,7 @@
         <image class="left" :src="item.visitor.avatarUrl" />
         <div class="right">
           <div class="top">
-            <uni-tag v-if="item.customIndex === 0" text="⬆️" type="success" @click="copy(item)" />
+            <!-- <uni-tag v-if="item.customIndex === 0" text="⬆️" type="success" @click="copy(item)" /> -->
             <div class="delete">
               <image src="../../static/images/close.png" class="delete_icon" @click="deleteMessage(item)"
                 v-if="isAdmin" />
@@ -83,7 +83,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, computed, getCurrentInstance } from 'vue'
-import { showToast } from '@src/utils'
+import { showToast, formatLocalTime } from '@src/utils'
 import { GlobalData } from '@src/types'
 import UniTag from '@src/component/uni-tag.vue'
 import {
@@ -160,8 +160,9 @@ onShareTimeline(() => {
 
 const formatDateTime = dateTimeString => {
   const dateObject = new Date(dateTimeString)
-  const formattedDateTime = `${dateObject.toISOString().slice(0, 19).replace('T', ' ')}`
-  return formattedDateTime
+  const pad = n => n.toString().padStart(2, '0')
+  return `${dateObject.getFullYear()}-${pad(dateObject.getMonth()+1)}-${pad(dateObject.getDate())} ` +
+         `${pad(dateObject.getHours())}:${pad(dateObject.getMinutes())}:${pad(dateObject.getSeconds())}`
 }
 
 const onInput = e => {
@@ -212,7 +213,7 @@ const onConfirm = e => {
 
 const sendGreet = e => {
 
-  if (instance.appContext.config.globalProperties.$MpUserData?.name) {
+  if (instance.appContext.config.globalProperties.globalData.mpUserInfo) {
     showToast('您已经送过祝福了~')
   } else {
     addUser()
@@ -243,7 +244,7 @@ const copy = item => {
 }
 
 const toMessage = e => {
-  if (instance.appContext.config.globalProperties.$MpUserData?.name) {
+  if (instance.appContext.config.globalProperties.globalData.mpUserInfo) {
     isOpen.value = true
   } else {
     modalName.value = 'Modal'

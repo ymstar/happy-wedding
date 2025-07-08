@@ -9,7 +9,7 @@
     <radio-group @change="radioChange" class="group">
       <label class="radio" v-for="(item, index) in list" :key="index">
         <radio :value="item.name" :checked="item.checked" />
-        {{ item.name }}
+        {{ item.value }}
       </label>
     </radio-group>
     <p class="title">备注</p>
@@ -29,29 +29,29 @@ import { getCurrentInstance, ref } from 'vue'
 const list = ref([
   {
     name: '自己出席',
-    value: 1,
+    value: '自己出席',
     checked: true
   },
   {
     name: '两人出席',
-    value: 2,
+    value: '两人出席',
     checked: false
   },
   {
     name: '三人出席',
-    value: 3,
+    value: '三人出席',
     checked: false
   },
   {
     name: '三人以上',
-    value: 4,
+    value: '三人以上',
     checked: false
   }
 ])
 const desc = ref('')
 const name = ref('')
 const phone = ref('')
-const count = ref(1)
+const count = ref('自己出席')
 const phoneFlag = ref(false)
 const _id = ref('')
 
@@ -59,10 +59,14 @@ const instance = getCurrentInstance()
 const $emit = defineEmits(['closeForm'])
 const openId = instance.appContext.config.globalProperties.$MpUserData?.openId
 
+const cancel = () => {
+  $emit('closeForm')
+}
+
 const radioChange = e => {
   count.value = e.detail.value
   list.value.forEach(item => {
-    if (item.value === count.value) {
+    if (item.name === count.value) {
       item.checked = true
     } else {
       item.checked = false
