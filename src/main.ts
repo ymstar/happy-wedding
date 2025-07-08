@@ -19,14 +19,14 @@ wx.setInnerAudioOption({
 })
 
 const userInfo = ref({
-  openId: "",
-  id: "",
-  userId: "",
-  openid: "",
-  name: "",
-  avatarUrl: "",
-  createdAt: "",
-  updatedAt: ""
+  openId: null,
+  id: null,
+  userId: null,
+  openid: null,
+  name: null,
+  avatarUrl: null,
+  createdAt: null,
+  updatedAt: null
 })
 
 uni.login({

@@ -83,7 +83,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, computed, getCurrentInstance } from 'vue'
-import { showToast, formatLocalTime } from '@src/utils'
+import { showToast } from '@src/utils'
 import { GlobalData } from '@src/types'
 import UniTag from '@src/component/uni-tag.vue'
 import {
@@ -101,17 +101,14 @@ import { onShareAppMessage, onShareTimeline, onShow } from '@dcloudio/uni-app'
 const isOpen = ref(false)
 const desc = ref('')
 const messageList = ref([])
-const userInfo = ref(null)
 const isForm = ref(false)
 const isVideo = ref(false)
 const isFormlist = ref(false)
-const formList = ref([])
-const url = ref('')
-const poster = ref('')
+
 const adminsIds = ref([])
-const musicPlay = ref(false)
+
 const nickname = ref('')
-const formRef = ref(null)
+
 const userList = ref([])
 
 const modalName = ref(null)
@@ -130,7 +127,9 @@ const avatarUrl = ref(
 )
 
 onShow(() => {
-  getVideoUrl()
+  getCommonConfig().then(res => {
+    adminsIds.value = res.data.adminOpenIds
+  })
   getUserList()
   isVideo.value = false
   isForm.value = false
@@ -213,7 +212,7 @@ const onConfirm = e => {
 
 const sendGreet = e => {
 
-  if (instance.appContext.config.globalProperties.globalData.mpUserInfo) {
+  if (instance.appContext.config.globalProperties.globalData.mpUserInfo?.id) {
     showToast('您已经送过祝福了~')
   } else {
     addUser()
@@ -224,27 +223,8 @@ const onChooseAvatar = e => {
   avatarUrl.value = e.detail.avatarUrl
 }
 
-const getVideoUrl = () => {
-  getCommonConfig().then(res => {
-    url.value = res.data.videoUrl
-    poster.value = res.data.poster
-    adminsIds.value = res.data.adminOpenIds
-  })
-}
-
-const copy = item => {
-  if (typeof item.customIndex === 'number') {
-    uni.setClipboardData({
-      data: item.desc,
-      success: function () {
-        showToast('复制成功')
-      }
-    })
-  }
-}
-
 const toMessage = e => {
-  if (instance.appContext.config.globalProperties.globalData.mpUserInfo) {
+  if (instance.appContext.config.globalProperties.globalData.mpUserInfo?.id) {
     isOpen.value = true
   } else {
     modalName.value = 'Modal'
@@ -283,38 +263,6 @@ const deleteMessage = item => {
       }
     }
   })
-}
-
-const getNowFormatDate = () => {
-  const now = new Date()
-  const year = now.getFullYear()
-  const month = now.getMonth() + 1
-  const day = now.getDate()
-  const hh = now.getHours()
-  const mm = now.getMinutes()
-  const ss = now.getSeconds()
-  let clock = year + '-'
-  if (month < 10) {
-    clock += '0'
-  }
-  clock += month + '-'
-  if (day < 10) {
-    clock += '0'
-  }
-  clock += day + ' '
-  if (hh < 10) {
-    clock += '0'
-  }
-  clock += hh + ':'
-  if (mm < 10) {
-    clock += '0'
-  }
-  clock += mm + ':'
-  if (ss < 10) {
-    clock += '0'
-  }
-  clock += ss
-  return clock
 }
 
 const getMessageList = () => {
