@@ -106,7 +106,7 @@
 import { onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app'
 import { getCommonConfig, getPresentList } from '@src/api/happy-wedding'
 import { GlobalData } from '@src/types'
-import { getCurrentInstance, onMounted, ref } from 'vue'
+import { computed, getCurrentInstance, onMounted, ref } from 'vue'
 
 const markers = ref([
   {
@@ -130,7 +130,9 @@ const markers = ref([
 const heNumber = ref('')
 const sheNumber = ref('')
 const activeTab = ref(0)
-const activeMarker = ref(markers.value[activeTab.value])
+const activeMarker = computed(() => {
+  return markers.value[activeTab.value]
+})
 const presentExist = ref(false)
 
 const instance = getCurrentInstance()

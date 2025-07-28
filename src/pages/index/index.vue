@@ -259,7 +259,7 @@
 				小程序前端代码以开源，感兴趣的小伙伴可以上 github 自取：https://github.com/ymstar/happy-wedding
 			</view>
 
-			<view class="mb28">最后放上我们的三生三世视频✿✿ヽ(°▽°)ノ✿☺️</view>
+			<view class="mb28">最后放上我们的前世今生视频✿✿ヽ(°▽°)ノ✿☺️</view>
 
 			<view v-if="magic" class="mb58">
 				<channel finder-user-name="sphnQSkTBRwbRTK"
@@ -369,46 +369,46 @@ const magic = ref(true);
 
 const imgs = {
 	// 封面图
-	cover: 'https://res.wx.qq.com/t/fed_upload/459fb8da-b31a-420f-b8cc-f51126952685/cover.jpg',
+	cover: 'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/other/%E5%B0%81%E9%9D%A2%E5%9B%BE1.jpg',
 	// 音乐封面
-	poster: 'https://res.wx.qq.com/t/fed_upload/d811d254-e5d6-4c19-9ff8-77c4b6128137/poster.jpg',
+	poster: 'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E9%9F%B3%E4%B9%90%E5%B0%81%E9%9D%A2.jpg',
 	// 新郎独照
-	husband: 'https://res.wx.qq.com/t/fed_upload/d811d254-e5d6-4c19-9ff8-77c4b6128137/husband.jpg',
+	husband: 'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E6%96%B0%E9%83%8E%E7%8B%AC%E7%85%A7.jpg',
 	// 新娘独照
-	wife: 'https://res.wx.qq.com/t/fed_upload/d811d254-e5d6-4c19-9ff8-77c4b6128137/wife.jpg',
+	wife: 'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E6%96%B0%E5%A8%98%E7%8B%AC%E7%85%A7.jpg',
 	// 轮播图1
 	swiper1: [
-		'https://res.wx.qq.com/t/fed_upload/849dfcf2-049a-42ba-9f6c-ddd6f30b8487/swiper1-1.jpg',
-		'https://res.wx.qq.com/t/fed_upload/849dfcf2-049a-42ba-9f6c-ddd6f30b8487/swiper1-2.jpg',
-		'https://res.wx.qq.com/t/fed_upload/849dfcf2-049a-42ba-9f6c-ddd6f30b8487/swiper1-3.jpg'
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E8%BD%AE%E6%92%AD%E5%9B%BE%201-1.jpg',
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E8%BD%AE%E6%92%AD%E5%9B%BE%201-2.jpg',
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E8%BD%AE%E6%92%AD%E5%9B%BE1-3.jpg'
 	],
 	// 连续图
 	series: [
-		'https://res.wx.qq.com/t/fed_upload/c707cb28-126b-4a5d-89f6-688551456d15/series1.jpg',
-		'https://res.wx.qq.com/t/fed_upload/c707cb28-126b-4a5d-89f6-688551456d15/series2.jpg',
-		'https://res.wx.qq.com/t/fed_upload/c707cb28-126b-4a5d-89f6-688551456d15/series3.jpg'
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E8%BF%9E%E7%BB%AD%E5%9B%BE%201.jpg',
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E8%BF%9E%E7%BB%AD%E5%9B%BE%202.jpg',
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E8%BF%9E%E7%BB%AD%E5%9B%BE%203.jpg'
 	],
 	// 左上图
-	leftUp: 'https://res.wx.qq.com/t/fed_upload/50898c02-4dd4-480a-ba6c-b175461b7b31/left-up.jpg',
+	leftUp: 'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E5%B7%A6%E4%B8%8A%E5%9B%BE.jpg',
 	// 左下图
-	leftDown: 'https://res.wx.qq.com/t/fed_upload/50898c02-4dd4-480a-ba6c-b175461b7b31/left-down.jpg',
+	leftDown: 'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/9Z7A1035.jpg',
 	// 四宫图
 	map: [
-		'https://res.wx.qq.com/t/fed_upload/b959a506-ca42-47e1-9fbd-732a6151e3d9/map1.jpg',
-		'https://res.wx.qq.com/t/fed_upload/b959a506-ca42-47e1-9fbd-732a6151e3d9/map2.jpg',
-		'https://res.wx.qq.com/t/fed_upload/b959a506-ca42-47e1-9fbd-732a6151e3d9/map3.jpg',
-		'https://res.wx.qq.com/t/fed_upload/b959a506-ca42-47e1-9fbd-732a6151e3d9/map4.jpg'
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E5%9B%9B%E5%AE%AB%E6%A0%BC%201.jpg',
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E5%9B%9B%E5%AE%AB%E6%A0%BC%202.jpg',
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E5%9B%9B%E5%AE%AB%E6%A0%BC%204.jpg',
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E5%9B%9B%E5%AE%AB%E6%A0%BC%203.jpg'
 	],
 	// 轮播图2
 	swiper2: [
-		'https://res.wx.qq.com/t/fed_upload/65134c0f-c513-410e-b4ff-ab738801540f/swiper2-1.jpg',
-		'https://res.wx.qq.com/t/fed_upload/65134c0f-c513-410e-b4ff-ab738801540f/swiper2-2.jpg',
-		'https://res.wx.qq.com/t/fed_upload/65134c0f-c513-410e-b4ff-ab738801540f/swiper2-3.jpg'
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E8%BD%AE%E6%92%AD%E5%9B%BE%202-1.jpg',
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E8%BD%AE%E6%92%AD%E5%9B%BE%202-2.jpg',
+		'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E8%BD%AE%E6%92%AD%E5%9B%BE%202-3.jpg'
 	],
 	// 轮播图2下方常驻图
-	swiper2Static: 'https://res.wx.qq.com/t/fed_upload/30d86ea7-84b8-46ce-ae60-e31b83a04fcc/swiper2-static.jpg',
+	swiper2Static: 'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/9Z7A0687.jpg',
 	// 结尾图1
-	end1: 'https://res.wx.qq.com/t/fed_upload/9b5bad9c-216b-4fd5-a3da-01bdb3a5e832/end1.jpg',
+	end1: 'https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E7%BB%93%E5%B0%BE%E5%9B%BE.jpg'
 }
 const timer = ref(null);
 
