@@ -234,6 +234,8 @@
 				<view>请预留好{{ weddingTimeStr[4] }}这一天的行程</view>
 				<view>如果被事务牵绊或临时有变化</view>
 				<view class="mb58">请提前告知新郎/新娘</view>
+				<view>10 月份的张北天气较凉，早晚温差较大，最低温度预计在 5 摄氏度左右</view>
+				<view class="mb58">请准备厚一点的衣物以防感冒~</view>
 				<view>许久未见 ，甚是想念</view>
 				<view>我们，婚礼见</view>
 			</view>
@@ -261,7 +263,7 @@
 
 			<view class="mb28">最后放上我们的前世今生视频✿✿ヽ(°▽°)ノ✿☺️</view>
 
-			<view v-if="magic" class="mb58">
+			<view v-if="relMagic" class="mb58">
 				<channel finder-user-name="sphnQSkTBRwbRTK"
 					feed-id="export/UzFfAgtgekIEAQAAAAAAwXcqT9uO3AAAAAstQy6ubaLX4KHWvLEZgBPElaBoJkt9KpyIzNPgMJoaUAjdYlpRj52z8YxKBNxQ"
 					poster="https://happy-wedding.sym930302.xyz/public/happy-wedding/yangming/image/%E8%A7%86%E9%A2%91%E5%B0%81%E9%9D%A2.jpg"
@@ -274,7 +276,7 @@
 		</view>
 
 
-		<view v-if="magic" class="greetings">
+		<view v-if="relMagic" class="greetings">
 			<view class="greetings-list">
 				<view :class="'greetings-item ' + (activeIdx === index ? 'active' : '')" @animationend="onAnimationend"
 					v-for="(item, index) in greetings" :key="index">
@@ -310,20 +312,13 @@ import { computed, getCurrentInstance, inject, onMounted, reactive, ref } from '
 const instance = getCurrentInstance()
 const globalData: GlobalData = instance.appContext.config.globalProperties.globalData
 
-const openId = globalData.mpUserInfo.openId
-
-const adminsIds = ref([])
-const isAdmin = computed(() => {
-	return adminsIds.value.indexOf(openId) !== -1
-})
-
-const musicIsPaused = false;
+const musicIsPaused = ref(true);
 const activeIdx = ref(0);
 
 const weddingTimeStr = [
-	'2025-10-02 11:30',
+	'2025-10-02T11:30:00',
 	'秋',
-	'2025 年 10 月 2号  11:30',
+	'2025 年 10 月 2 号  11:30',
 	'农历八月十一',
 	' 10 月 2 号 '
 ]
@@ -366,6 +361,9 @@ const couple = {
 }
 
 const magic = ref(true);
+const relMagic = computed(() => {
+  return magic.value === true
+})
 
 const imgs = {
 	// 封面图
@@ -449,9 +447,8 @@ const getMessageList = () => {
 }
 
 onMounted(() => {
-	magic.value = globalData.magic;
+	magic.value = instance.appContext.config.globalProperties.$magic;
 	getCommonConfig().then(res => {
-		adminsIds.value = res.data.adminOpenIds
 		couple.groom = res.data.groom
 		couple.bride = res.data.bride
 	})
@@ -468,22 +465,15 @@ onLoad(() => {
 	innerAudioContext.loop = true
 })
 
-onShow(()=>{
-	innerAudioContext.play()
-})
-
 const onPlay = () => {
 	isPlaying.value = true
 }
 const onPause = () => {
-	isPlaying.value = false
+	isPlaying.value = false;
+	musicIsPaused.value = true;
 }
 const onEnded = () => {
-	if (globalData.musicIndex >= globalData.musicList.length) {
-		globalData.musicIndex = 0
-	}
-	globalData.innerAudioContext.src = globalData.musicList[globalData.musicIndex].url
-	globalData.musicIndex += 1
+	globalData.innerAudioContext.src = instance.appContext.config.globalProperties.$musicList[0].url
 }
 
 // 小程序卸载时，取消自动拉取祝福语定时器，销毁背景音乐
@@ -493,7 +483,6 @@ onUnload(() => {
 		timer.value = null;
 	}
 })
-
 
 // 分享到会话
 onShareAppMessage(() => {
@@ -512,7 +501,7 @@ onShareTimeline(() => {
 })
 
 const toggleMusic = () => {
-	if (innerAudioContext.paused) {
+	if (musicIsPaused.value || innerAudioContext.paused) {
 		innerAudioContext.play()
 		showToast('背景音乐已开启~')
 	} else {

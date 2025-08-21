@@ -1,16 +1,16 @@
 <template>
     <view>
         <!-- 使用官方的channel-video组件 -->
-        <block v-if="useChannelVideo && magic">
+        <block v-if="useChannelVideo">
             <!-- 需要加上单页模式的判断，单页模式下不会渲染视频号卡片，而且连个占位都没有，要自行实现占位，也就是下面的.channel-video-placeholder -->
             <!-- 另外再吐槽一句，开发者工具里居然跟单页模式一样也不会渲染视频号卡片，也是醉了 -->
-            <channel-video v-if="!isSinglePage && magic" :finder-user-name="finderUserName" :feed-id="feedId"
+            <channel-video v-if="!isSinglePage" :finder-user-name="finderUserName" :feed-id="feedId"
                 :feed-token="feedToken"></channel-video>
             <view v-else class="channel channel-video-placeholder">请点击底部「前往小程序」按钮来查看</view>
         </block>
 
         <!-- 使用自行实现的视频号模拟组件 -->
-        <view v-else-if="magic" class="channel" @tap="openChannel">
+        <view v-else class="channel" @tap="openChannel">
             <image class="channel-poster" :src="poster" mode="aspectFit" />
             <image class="channel-play" src="/static/images/icon/play.png" mode="aspectFit" />
             <view class="channel-nickname">
@@ -26,9 +26,7 @@
 export default {
     data() {
         return {
-            isSinglePage: false,
-            // 是否单页模式
-            magic: true // 魔法开关
+            isSinglePage: false
         };
     },
     props: {

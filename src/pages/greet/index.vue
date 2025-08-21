@@ -29,16 +29,22 @@
     </div>
   </div>
   <div class="greet">
-    <!-- <image class="head" src="../../static/images/heart-animation.gif" /> -->
     <p class="count">已收到{{ userList.length }}位好友送来的祝福</p>
-    <scroll-view scroll-y class="image-box">
-      <div class="image-item" v-for="(item, index) in userList" :key="index">
-        <view class="cu-avatar round lg" :style="{
-          'background-image': `url(${item.avatarUrl})`
-        }"></view>
-        <!-- <p>{{ item.user.nickName }}</p> -->
+    <div class="avatar-scroll-container" v-if="displayUsers.length > 0">
+      <div class="avatar-scroll-wrapper" :style="{ animationDuration: animationDuration + 's' }">
+        <div class="avatar-item" v-for="(item, index) in displayUsers" :key="index">
+          <view class="cu-avatar round lg" :style="{
+            'background-image': `url(${item.avatarUrl})`
+          }"></view>
+        </div>
+        <!-- 复制一份用于无缝滚动 -->
+        <div class="avatar-item" v-for="(item, index) in displayUsers" :key="index + 'copy'">
+          <view class="cu-avatar round lg" :style="{
+            'background-image': `url(${item.avatarUrl})`
+          }"></view>
+        </div>
       </div>
-    </scroll-view>
+    </div>
 
     <view class="cu-modal" :class="modalName === 'Modal' ? 'show' : ''">
       <view class="cu-dialog">
@@ -82,10 +88,8 @@
 
 
 <script setup lang="ts">
-import { onMounted, ref, computed, getCurrentInstance } from 'vue'
+import { onMounted, ref, computed, getCurrentInstance, onUnmounted, watch } from 'vue'
 import { showToast } from '@src/utils'
-import { GlobalData } from '@src/types'
-import UniTag from '@src/component/uni-tag.vue'
 import {
   addMessage,
   addOrUpdateUser,
@@ -111,20 +115,26 @@ const nickname = ref('')
 
 const userList = ref([])
 
+const displayUsers = ref([])
+const animationDuration = ref(10)
+const scrollInterval = ref(null)
+
 const modalName = ref(null)
 const instance = getCurrentInstance()
-const globalData: GlobalData = instance.appContext.config.globalProperties.globalData
 
-const openId = globalData.mpUserInfo.openId
+const openId = instance.appContext.config.globalProperties.$MpUserData?.openId
 
 const isAdmin = computed(() => {
   return adminsIds.value.indexOf(openId) !== -1
 })
-const magic = ref(true);
+const magic = instance.appContext.config.globalProperties.$magic;
 
 const avatarUrl = ref(
   'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'
 )
+
+const sendingGreet = ref(false)
+const sendingMessage = ref(false)
 
 onShow(() => {
   getCommonConfig().then(res => {
@@ -138,7 +148,14 @@ onShow(() => {
 })
 
 onMounted(() => {
-  magic.value = globalData.magic;
+  updateDisplayUsers()
+  scrollInterval.value = setInterval(updateDisplayUsers, 3000)
+})
+
+onUnmounted(() => {
+  if (scrollInterval.value) {
+    clearInterval(scrollInterval.value)
+  }
 })
 
 // 分享到会话
@@ -160,8 +177,8 @@ onShareTimeline(() => {
 const formatDateTime = dateTimeString => {
   const dateObject = new Date(dateTimeString)
   const pad = n => n.toString().padStart(2, '0')
-  return `${dateObject.getFullYear()}-${pad(dateObject.getMonth()+1)}-${pad(dateObject.getDate())} ` +
-         `${pad(dateObject.getHours())}:${pad(dateObject.getMinutes())}:${pad(dateObject.getSeconds())}`
+  return `${dateObject.getFullYear()}-${pad(dateObject.getMonth() + 1)}-${pad(dateObject.getDate())} ` +
+    `${pad(dateObject.getHours())}:${pad(dateObject.getMinutes())}:${pad(dateObject.getSeconds())}`
 }
 
 const onInput = e => {
@@ -185,37 +202,40 @@ const onConfirm = e => {
 
   const openId = instance.appContext.config.globalProperties.$MpUserData.openId
   uploadAvatar(avatarUrl.value, openId)
-  .then(res => {
-    addOrUpdateUser({
-      openid: openId,
-      user: {
-        nickName: nickname.value,
-        avatarUrl: res.data
-      }
-    }).then(res => {
-      showToast('祝福成功~')
-      if (magic.value) {
-        isOpen.value = true
-      }
-      getUserList()
-      getUserByOpenId(openId).then(res => {
-        if (res?.data?.length > 0) {
-          instance.appContext.config.globalProperties.$MpUserData = {
-            openId,
-            ...res.data[0]
-          }
+    .then(res => {
+      addOrUpdateUser({
+        openid: openId,
+        user: {
+          nickName: nickname.value,
+          avatarUrl: res.data
         }
+      }).then(res => {
+        if (sendingGreet.value) {
+          showToast('祝福成功~')
+          getUserList()
+          getUserByOpenId(openId).then(res => {
+            if (res?.data?.length > 0) {
+              instance.appContext.config.globalProperties.$MpUserData = {
+                openId,
+                ...res.data[0]
+              }
+            }
+          })
+        }
+        if (sendingMessage) {
+          isOpen.value = false
+        }
+
       })
     })
-  })
 }
 
 const sendGreet = e => {
-
-  if (instance.appContext.config.globalProperties.globalData.mpUserInfo?.id) {
+  if (instance.appContext.config.globalProperties.$MpUserData?.id) {
     showToast('您已经送过祝福了~')
   } else {
-    addUser()
+    sendingGreet.value = true
+    modalName.value = 'Modal'
   }
 }
 
@@ -224,9 +244,10 @@ const onChooseAvatar = e => {
 }
 
 const toMessage = e => {
-  if (instance.appContext.config.globalProperties.globalData.mpUserInfo?.id) {
+  if (instance.appContext.config.globalProperties.$MpUserData?.id) {
     isOpen.value = true
   } else {
+    sendingMessage.value = true
     modalName.value = 'Modal'
   }
 }
@@ -271,21 +292,35 @@ const getMessageList = () => {
   })
 }
 
-const addUser = () => {
-  modalName.value = 'Modal'
-}
-
-
 const getUserList = () => {
   getFriendUserList().then(res => {
     userList.value = res.data.reverse()
   })
 }
+
+// 控制最多显示5个头像，并循环滚动
+const updateDisplayUsers = () => {
+  if (userList.value.length <= 5) {
+    displayUsers.value = [...userList.value]
+  } else {
+    // 当用户数量超过5个时，循环显示
+    const now = Date.now()
+    const index = Math.floor((now / 3000) % (userList.value.length - 4))
+    displayUsers.value = userList.value.slice(index, index + 5)
+  }
+}
+
+// 监听userList变化，更新显示的用户
+watch(userList, () => {
+  updateDisplayUsers()
+  // 根据用户数量调整动画速度
+  animationDuration.value = Math.max(5, userList.value.length * 0.5)
+})
 </script>
 
 <style lang="scss" scoped>
 .message {
-  height: 70%;
+  height: 85%;
   width: 100%;
 
   .box {
@@ -485,7 +520,7 @@ const getUserList = () => {
 
 .greet {
   width: 100%;
-  height: 20%;
+  height: 10%;
 
   .head {
     height: 150rpx;
@@ -576,5 +611,41 @@ const getUserList = () => {
   .right {
     margin: 0;
   }
+}
+
+// 添加右下角头像滚动样式
+.avatar-scroll-container {
+  position: fixed;
+  bottom: 140rpx; // 在底部按钮上方
+  right: 20rpx;
+  width: 100rpx;
+  height: 500rpx; // 可容纳5个头像
+  overflow: hidden;
+  z-index: 6668;
+}
+
+.avatar-scroll-wrapper {
+  display: flex;
+  flex-direction: column;
+  animation: scrollUp linear infinite;
+}
+
+@keyframes scrollUp {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+.avatar-item {
+  width: 100rpx;
+  height: 100rpx;
+  margin-bottom: 20rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

@@ -1,21 +1,5 @@
 export type GlobalData = {
-	magic: boolean,
-	mpUserInfo: {
-		openId: string,
-		id: string,
-		userId: string,
-		openid: string,
-		name: string,
-		avatarUrl: string,
-		createdAt: string,
-		updatedAt: string
-	},
 	innerAudioContext: WechatMiniprogram.InnerAudioContext
-	musicList: Array<{
-		id: string
-		url: string
-	}>
-	musicIndex: number
 	animations: Array<
 		| `bounce`
 		| `flash`

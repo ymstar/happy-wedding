@@ -136,8 +136,7 @@ const activeMarker = computed(() => {
 const presentExist = ref(false)
 
 const instance = getCurrentInstance()
-const globalData: GlobalData = instance.appContext.config.globalProperties.globalData
-const openId = globalData.mpUserInfo.openId
+const openId = instance.appContext.config.globalProperties.$MpUserData?.openId
 
 onMounted(() => {
   getPresentList(openId).then(res => {

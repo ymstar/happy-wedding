@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { onLaunch, onShow, onHide, onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app'
-import { getCurrentInstance, onMounted } from 'vue'
-import { code2Session, getUserByOpenId } from './api/happy-wedding'
+import { onLaunch, onShow, onHide } from '@dcloudio/uni-app'
+import { getCurrentInstance } from 'vue'
+import { code2Session, getCommonConfig, getResouces, getUserByOpenId } from './api/happy-wedding'
 
 onLaunch(() => {
   console.log('App Launch')
@@ -13,23 +13,27 @@ onHide(() => {
   console.log('App Hide')
 })
 
+const instance = getCurrentInstance()
+
 uni.login({
   provider: 'weixin',
   success: res => {
-    console.log('login succeed:', res)
     code2Session(res.code).then(res => {
       const openId = res.data.openid
+      console.log('code2Session openId:', openId)
       instance.appContext.config.globalProperties.$MpUserData = {
         openId
       }
 
       getUserByOpenId(openId).then(res => {
-        if (res?.data?.length > 0) {
+        console.log('getUserByOpenId:', res)
+        if (res?.data) {
           instance.appContext.config.globalProperties.$MpUserData = {
             openId,
-            ...res.data[0]
+            ...res.data
           }
         }
+        console.log('globalProperties.$MpUserData:', instance.appContext.config.globalProperties.$MpUserData)
       })
     })
   },
@@ -38,7 +42,6 @@ uni.login({
   }
 })
 
-const instance = getCurrentInstance()
 uni.getSystemInfo({
   success: function (e) {
     instance.appContext.config.globalProperties.$StatusBar = e.statusBarHeight
@@ -63,6 +66,14 @@ uni.getSystemInfo({
   fail: function (e) {
     console.log(e)
   }
+})
+
+getCommonConfig().then(res => {
+  instance.appContext.config.globalProperties.$magic = !res.data.magicSwitch as boolean
+})
+
+getResouces('music').then(res => {
+  instance.appContext.config.globalProperties.$musicList = res.data as any[]
 })
 </script>
 <style lang="scss">

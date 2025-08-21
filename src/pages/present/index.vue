@@ -21,10 +21,9 @@ const formRef = ref(null)
 const isFormlist = ref(false)
 const formList = ref([])
 const instance = getCurrentInstance()
-const globalData: GlobalData = instance.appContext.config.globalProperties.globalData
-const openId = globalData.mpUserInfo.openId
+const openId = instance.appContext.config.globalProperties.$MpUserData?.openId
 
-const magic = globalData.magic;
+const magic = instance.appContext.config.globalProperties.$magic;
 
 // 分享到会话
 onShareAppMessage(() => {
