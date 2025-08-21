@@ -214,10 +214,10 @@ const onConfirm = e => {
           showToast('祝福成功~')
           getUserList()
           getUserByOpenId(openId).then(res => {
-            if (res?.data?.length > 0) {
+            if (res?.data) {
               instance.appContext.config.globalProperties.$MpUserData = {
                 openId,
-                ...res.data[0]
+                ...res.data
               }
             }
           })
