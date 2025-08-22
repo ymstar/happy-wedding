@@ -312,7 +312,7 @@ import { computed, getCurrentInstance, inject, onMounted, reactive, ref } from '
 const instance = getCurrentInstance()
 const globalData: GlobalData = instance.appContext.config.globalProperties.globalData
 
-const musicIsPaused = ref(true);
+const musicIsPaused = ref(false);
 const activeIdx = ref(0);
 
 const weddingTimeStr = [
@@ -475,6 +475,7 @@ onShow(() => {
 
 const onPlay = () => {
 	isPlaying.value = true
+	musicIsPaused.value = false
 }
 const onPause = () => {
 	isPlaying.value = false;
@@ -511,8 +512,10 @@ onShareTimeline(() => {
 const toggleMusic = () => {
 	if (musicIsPaused.value || innerAudioContext.paused) {
 		innerAudioContext.play()
+		musicIsPaused.value = false
 		showToast('背景音乐已开启~')
 	} else {
+		musicIsPaused.value = true
 		innerAudioContext.pause()
 		showToast('您已暂停音乐播放~')
 	}
