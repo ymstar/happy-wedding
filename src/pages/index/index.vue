@@ -455,6 +455,7 @@ onMounted(() => {
 	setInterval(() => now.value = Date.now(), 1000)
 })
 onLoad(() => {
+	magic.value = instance.appContext.config.globalProperties.$magic;
 	timer.value = null;
 	getMessageList();
 	setInterval(() => getMessageList(), 20000)
@@ -463,6 +464,13 @@ onLoad(() => {
 	innerAudioContext.onPause(onPause)
 	innerAudioContext.src = music.value.src
 	innerAudioContext.loop = true
+})
+
+onShow(() => {
+	magic.value = instance.appContext.config.globalProperties.$magic;
+	if (musicIsPaused.value || innerAudioContext.paused) {
+		innerAudioContext.play()
+	}
 })
 
 const onPlay = () => {
